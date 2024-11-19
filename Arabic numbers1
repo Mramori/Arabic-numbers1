@@ -1,0 +1,68 @@
+#include <iostream>
+#include <string>
+#include <map>
+
+using namespace std;
+
+// Функция для перевода арабских цифр в римские
+string arabicToRoman(int num) {
+    if (num < 1 || num > 3999) return "Некорректное число";
+
+    string roman = "";
+    map<int, string> romanNumerals = {
+        {1000, "M"}, {900, "CM"}, {500, "D"}, {400, "CD"},
+        {100, "C"}, {90, "XC"}, {50, "L"}, {40, "XL"},
+        {10, "X"}, {9, "IX"}, {5, "V"}, {4, "IV"},
+        {1, "I"}
+    };
+
+    for (auto& pair : romanNumerals) {
+        while (num >= pair.first) {
+            roman += pair.second;
+            num -= pair.first;
+        }
+    }
+
+    return roman;
+}
+
+// Функция для перевода римских цифр в арабские
+int romanToArabic(const string& roman) {
+    map<char, int> romanValues = {
+        {'I', 1}, {'V', 5}, {'X', 10}, {'L', 50},
+        {'C', 100}, {'D', 500}, {'M', 1000}
+    };
+
+    int total = 0;
+    int prevValue = 0;
+
+    for (char c : roman) {
+        int value = romanValues[c];
+        if (value > prevValue) {
+            total += value - 2 * prevValue; // вычитаем предыдущее значение
+        }
+        else {
+            total += value;
+        }
+        prevValue = value;
+    }
+
+    return total;
+}
+
+int main() {
+    int arabicNumber;
+    string romanNumber;
+
+    // Перевод арабских цифр в римские
+    cout << "Введите арабское число (1-3999): ";
+    cin >> arabicNumber;
+    cout << "Римское представление: " << arabicToRoman(arabicNumber) << endl;
+
+    // Перевод римских цифр в арабские
+    cout << "Введите римское число: ";
+    cin >> romanNumber;
+    cout << "Арабское представление: " << romanToArabic(romanNumber) << endl;
+
+    return 0;
+}
